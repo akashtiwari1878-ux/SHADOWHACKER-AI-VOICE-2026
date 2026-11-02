@@ -1,0 +1,38 @@
+name: Build SHADOWHACKER AI APK
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Generate Android platform files
+        run: flutter create --platforms=android .
+      - name: Add Android permissions
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('android/app/src/main/AndroidManifest.xml')
+          s = p.read_text()
+          marker = '<manifest xmlns:android="http://schemas.android.com/apk/res/android">'
+          additions = '\\n    <uses-permission android:name="android.permission.INTERNET"/>\\n    <uses-permission android:name="android.permission.RECORD_AUDIO"/>\\n'
+          if 'android.permission.RECORD_AUDIO' not in s:
+              s = s.replace(marker, marker + additions)
+          p.write_text(s)
+          PY
+      - name: Install packages
+        run: flutter pub get
+      - name: Build release APK
+        run: flutter build apk --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shadowhacker-ai-voice-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
