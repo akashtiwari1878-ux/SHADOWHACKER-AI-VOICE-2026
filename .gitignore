@@ -1,0 +1,9 @@
+server/.env
+.env
+.env.*
+!.env.example
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+.dart_tool/

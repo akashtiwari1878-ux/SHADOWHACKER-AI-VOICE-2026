@@ -37,7 +37,7 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   // Replace this with your deployed HTTPS backend URL ending in /chat.
-  static const String serverUrl = 'https://YOUR-BACKEND-DOMAIN.example/chat';
+  static const String serverUrl = 'https://shadowhacker-ai-voice-2026.onrender.com/chat';
 
   final input = TextEditingController();
   final scroll = ScrollController();
